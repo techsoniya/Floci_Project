@@ -16,7 +16,15 @@
 <p align="center">
 A complete Local Multi-Cloud development environment built using <b>Floci</b>, Docker and Python that emulates AWS, Azure and Google Cloud services entirely on a local machine without requiring cloud accounts or cloud infrastructure.
 </p>
+# 🏗️ Solution Architecture
 
+The following diagram illustrates the complete local multi-cloud and event-driven serverless architecture implemented in this project.
+
+<p align="center">
+  <img src="Images/Floci-Multi-CLoud.png"
+       alt="Floci Local Multi-Cloud Architecture"
+       width="1000">
+</p>
 ---
 
 # 📖 Table of Contents
