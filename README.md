@@ -17,6 +17,12 @@
 A complete Local Multi-Cloud development environment built using <b>Floci</b>, Docker and Python that emulates AWS, Azure and Google Cloud services entirely on a local machine without requiring cloud accounts or cloud infrastructure.
 </p>
 
+
+## 🎥 Project Demo
+
+Watch the complete walkthrough here:
+
+https://drive.google.com/your-video-link
 ---
 
 # 📖 Table of Contents
@@ -465,20 +471,974 @@ The script:
 | SDKs | boto3, Azure Storage SDK, Google Cloud SDK |
 | Scripting | PowerShell |
 
+# 🚀 Getting Started
+
+This section provides a complete walkthrough for setting up and running the project on your local machine.
+
 ---
 
-> **Next (Part 2)** will cover:
->
-> - Prerequisites
-> - Installation
-> - Running Docker Compose
-> - Step-by-step setup
-> - Deploying the Serverless Architecture
-> - Testing the pipeline
-> - Expected outputs
-> - Port mappings
-> - Health checks
-> - Verification commands
->
-> It will be written so anyone can recreate your project from scratch.
-````
+# 📋 Prerequisites
+
+Before starting, make sure the following software is installed.
+
+| Software | Version |
+|-----------|----------|
+| Docker Desktop | Latest |
+| Docker Compose | Included with Docker Desktop |
+| Python | 3.10 or later |
+| AWS CLI | Latest |
+| PowerShell | Windows PowerShell 5+ |
+| Git | Latest |
+
+Verify the installation using:
+
+```powershell
+docker --version
+
+docker compose version
+
+python --version
+
+aws --version
+
+git --version
+```
+
+---
+
+# 📥 Clone the Repository
+
+Clone the repository from GitHub.
+
+```bash
+git clone <YOUR_REPOSITORY_URL>
+
+cd Floci_Project
+```
+
+---
+
+# 📁 Project Structure
+
+After cloning, your repository should look like this.
+
+```text
+Floci_Project/
+
+│
+
+├── docker-compose.yml
+
+│
+
+└── src/
+
+    ├── demo.ps1
+
+    ├── processor.py
+
+    ├── test_demo.py
+
+    ├── sales_report_2026.json
+
+    ├── user_clicks.csv
+
+    └── server_logs.txt
+```
+
+---
+
+# 🐳 Start the Local Multi-Cloud Infrastructure
+
+This project uses Docker Compose to launch the complete Floci environment.
+
+The following services are started automatically:
+
+- Floci UI
+- Floci API
+- AWS Emulator
+- Azure Emulator
+- Google Cloud Emulator
+
+Run:
+
+```powershell
+docker compose up -d
+```
+
+Docker will download the required images if they are not already present.
+
+---
+
+# 🔍 Verify Running Containers
+
+Check that every container is running successfully.
+
+```powershell
+docker ps
+```
+
+Expected containers include:
+
+```
+floci-ui
+
+floci-api
+
+floci
+
+floci-az
+
+floci-gcp
+```
+
+---
+
+# 🌐 Open the Floci Dashboard
+
+Once the containers are running, open your browser.
+
+```
+http://localhost:4500
+```
+
+This dashboard provides a unified interface for viewing resources across AWS, Azure and Google Cloud running locally.
+
+---
+
+# ⚙ Understanding docker-compose.yml
+
+The Docker Compose configuration launches five services.
+
+| Service | Purpose |
+|----------|----------|
+| floci-ui | Web Dashboard |
+| floci-api | Backend API |
+| floci | AWS Emulator |
+| floci-az | Azure Emulator |
+| floci-gcp | Google Cloud Emulator |
+
+The services communicate using an internal Docker network.
+
+This allows each emulator to communicate without requiring internet connectivity.
+
+---
+
+# 🌐 Internal Network
+
+```
+                     Docker Network
+
+                    floci_default
+
+                           │
+
+        ┌──────────────────┼───────────────────┐
+
+        ▼                  ▼                   ▼
+
+      floci           floci-az          floci-gcp
+
+        │
+
+        ▼
+
+     floci-api
+
+        │
+
+        ▼
+
+      floci-ui
+```
+
+---
+
+# 🔌 Port Mapping
+
+The project exposes the following ports.
+
+| Port | Service |
+|-------|----------|
+| 4500 | Floci Dashboard |
+| 4501 | Floci API |
+| 4566 | AWS Emulator |
+| 4577 | Azure Emulator |
+| 4588 | Google Cloud Emulator |
+
+---
+
+# 📂 Sample Data
+
+Three sample datasets are included in the repository.
+
+| File | Cloud Destination |
+|-------|------------------|
+| sales_report_2026.json | AWS S3 |
+| user_clicks.csv | Google Cloud Storage |
+| server_logs.txt | Azure Blob Storage |
+
+These files are used to demonstrate multi-cloud data ingestion.
+
+---
+
+# 🚀 Deploy the Local Serverless Architecture
+
+After Docker Compose is running, deploy the AWS serverless components.
+
+Open PowerShell inside the project directory.
+
+Run:
+
+```powershell
+.\src\demo.ps1
+```
+
+This script automatically performs the following operations.
+
+---
+
+## Step 1
+
+Creates an S3 bucket.
+
+```
+raw-uploads
+```
+
+---
+
+## Step 2
+
+Creates a DynamoDB table.
+
+```
+processed-events
+```
+
+---
+
+## Step 3
+
+Packages the Lambda source code.
+
+```
+processor.py
+
+↓
+
+processor.zip
+```
+
+---
+
+## Step 4
+
+Deploys the Lambda function.
+
+```
+Function Name
+
+↓
+
+s3-processor
+```
+
+---
+
+## Step 5
+
+Registers S3 ObjectCreated events.
+
+Whenever a new file is uploaded into the bucket,
+
+```
+raw-uploads
+```
+
+the Lambda function is automatically triggered.
+
+---
+
+# ⚡ Event-Driven Workflow
+
+```
+Upload File
+
+↓
+
+Amazon S3
+
+↓
+
+ObjectCreated Event
+
+↓
+
+Lambda Trigger
+
+↓
+
+processor.py
+
+↓
+
+Extract Metadata
+
+↓
+
+DynamoDB
+
+↓
+
+Processing Complete
+```
+
+---
+
+# 🧠 What Happens Inside processor.py?
+
+The Lambda function receives the S3 event.
+
+For every uploaded object it extracts:
+
+- Bucket Name
+
+- Object Name
+
+- File Size
+
+It then writes this information into the DynamoDB table.
+
+Example stored record:
+
+```json
+{
+    "event_id":"sales_report_2026.json",
+    "bucket":"raw-uploads",
+    "file_size_bytes":369,
+    "status":"PROCESSED"
+}
+```
+
+---
+
+# 🧪 Test the Complete Pipeline
+
+Once the infrastructure has been deployed, execute:
+
+```powershell
+python .\src\test_demo.py
+```
+
+The script automatically:
+
+- uploads a sample object
+
+- waits for Lambda execution
+
+- queries DynamoDB
+
+- verifies successful processing
+
+No manual interaction is required.
+
+---
+
+# ✅ Expected Console Output
+
+A successful execution should produce output similar to:
+
+```
+Dropping sample file into local S3 bucket...
+
+Waiting for Lambda execution...
+
+Checking DynamoDB...
+
+SUCCESS!
+
+Local Event-Driven Pipeline Executed Perfectly
+```
+
+---
+
+# 🔍 Verify the Dashboard
+
+Open
+
+```
+http://localhost:4500
+```
+
+You should be able to browse resources from
+
+- AWS
+
+- Azure
+
+- Google Cloud
+
+through a single dashboard.
+
+---
+
+# 🩺 Health Checks
+
+You can verify that each emulator is responding correctly.
+
+## AWS Emulator
+
+```powershell
+Invoke-RestMethod `
+-Uri "http://localhost:4566/_floci/health"
+```
+
+---
+
+## Azure Emulator
+
+```powershell
+Invoke-RestMethod `
+-Uri "http://localhost:4577/devstoreaccount1?comp=list" `
+-Headers @{
+"x-ms-version"="2020-04-08"
+}
+```
+
+---
+
+## Google Cloud Emulator
+
+```powershell
+Invoke-RestMethod `
+-Uri "http://localhost:4588/storage/v1/b?project=floci-local"
+```
+
+---
+
+## Floci API
+
+```powershell
+Invoke-RestMethod `
+-Uri "http://localhost:4500/api/clouds/aws/status"
+```
+
+---
+
+# 🧹 Stop the Environment
+
+When finished, stop every service.
+
+```powershell
+docker compose down
+```
+
+To remove containers and volumes completely:
+
+```powershell
+docker compose down -v
+```
+
+---
+
+# 📸 Suggested Screenshots
+
+To make this repository more attractive, include screenshots such as:
+
+- Floci Dashboard Home
+
+- AWS S3 Bucket
+
+- Azure Blob Storage
+
+- Google Cloud Storage
+
+- Docker Containers Running
+
+- Successful Lambda Execution
+
+- DynamoDB Record
+
+- Terminal Output
+
+These screenshots will help readers understand the workflow and reproduce the project more easily.
+
+---
+
+➡ **Next (Part 3)** will include:
+
+- Deep dive into every source file
+- Complete explanation of `processor.py`
+- Explanation of `demo.ps1`
+- Explanation of `test_demo.py`
+- What I learned
+- Challenges faced
+- Why this project matters for Data Engineering
+- Future improvements
+- License
+- Acknowledgements
+- Final conclusion suitable for recruiters and GitHub visitors
+
+# 🔍 Source Code Walkthrough
+
+This section explains how each file in the repository contributes to the complete local multi-cloud and serverless architecture.
+
+Rather than simply running commands, understanding how these files interact provides insight into how cloud-native applications are built and tested locally.
+
+---
+
+# 📂 Source Files
+
+## 1. docker-compose.yml
+
+This file is responsible for creating the entire local cloud environment.
+
+Instead of manually starting individual Docker containers, Docker Compose orchestrates every required service with a single command.
+
+### Services Started
+
+| Service | Purpose |
+|----------|----------|
+| floci-ui | Unified dashboard for managing local cloud resources |
+| floci-api | Backend API that communicates with the cloud emulators |
+| floci | Local AWS emulator |
+| floci-az | Local Azure emulator |
+| floci-gcp | Local Google Cloud emulator |
+
+The compose file also:
+
+- Configures environment variables
+- Exposes required ports
+- Creates the Docker network
+- Links all services together
+
+This allows every container to communicate internally without depending on external cloud services.
+
+---
+
+## 2. demo.ps1
+
+This PowerShell script automates the setup of the local AWS serverless environment.
+
+Instead of manually creating resources one by one, the script provisions everything automatically.
+
+### Operations Performed
+
+### Create S3 Bucket
+
+```
+raw-uploads
+```
+
+The bucket stores uploaded files locally.
+
+---
+
+### Create DynamoDB Table
+
+```
+processed-events
+```
+
+The table stores metadata generated after files are processed.
+
+---
+
+### Deploy Lambda Function
+
+The script compresses
+
+```
+processor.py
+```
+
+into a deployment package and creates a Lambda function named
+
+```
+s3-processor
+```
+
+---
+
+### Configure Event Notifications
+
+Finally, the script connects S3 with Lambda.
+
+Whenever a new object is uploaded into
+
+```
+raw-uploads
+```
+
+Lambda executes automatically.
+
+No manual trigger is required.
+
+---
+
+## 3. processor.py
+
+This is the heart of the event-driven architecture.
+
+It acts as the AWS Lambda function.
+
+### Responsibilities
+
+Receive the S3 event.
+
+↓
+
+Extract information from the uploaded object.
+
+↓
+
+Store metadata in DynamoDB.
+
+↓
+
+Return a successful execution response.
+
+---
+
+### Event Processing
+
+When a file is uploaded, Lambda receives an event similar to:
+
+```
+Bucket Name
+
+Object Name
+
+Object Size
+
+Upload Event
+```
+
+The function extracts:
+
+- Bucket Name
+- File Name
+- File Size
+
+and inserts a new record into DynamoDB.
+
+Example:
+
+| Field | Value |
+|--------|--------|
+| event_id | sales_report_2026.json |
+| bucket | raw-uploads |
+| file_size_bytes | 369 |
+| status | PROCESSED |
+
+---
+
+## 4. test_demo.py
+
+This script validates that the complete architecture works correctly.
+
+Instead of manually uploading files and checking DynamoDB, the script performs the entire verification automatically.
+
+### Workflow
+
+Upload sample JSON file
+
+↓
+
+Wait for Lambda execution
+
+↓
+
+Query DynamoDB
+
+↓
+
+Verify processing
+
+↓
+
+Display success message
+
+This confirms that:
+
+- S3 upload works
+- Lambda executes
+- DynamoDB stores metadata
+- Event notification is functioning correctly
+
+---
+
+## 5. sales_report_2026.json
+
+A sample JSON dataset representing sales transactions.
+
+Purpose:
+
+- Demonstrate object uploads
+- Trigger Lambda execution
+- Simulate structured business data
+
+---
+
+## 6. user_clicks.csv
+
+A sample CSV dataset containing user clickstream events.
+
+Purpose:
+
+- Demonstrate ingestion into Google Cloud Storage
+- Represent analytical data
+
+---
+
+## 7. server_logs.txt
+
+A sample log file representing application logs.
+
+Purpose:
+
+- Demonstrate Azure Blob Storage uploads
+- Represent operational log ingestion
+
+---
+
+# 🧠 How Everything Works Together
+
+The repository combines multi-cloud storage with an event-driven AWS workflow.
+
+```
+                    docker compose up
+
+                            │
+
+        ┌───────────────────┼───────────────────┐
+
+        ▼                   ▼                   ▼
+
+      AWS               Azure              Google Cloud
+
+        │                   │                   │
+
+        ▼                   ▼                   ▼
+
+ Local Storage       Local Blob        Local Cloud Storage
+
+        │
+
+        ▼
+
+Run demo.ps1
+
+        │
+
+        ▼
+
+Create S3 Bucket
+
+        │
+
+        ▼
+
+Create DynamoDB
+
+        │
+
+        ▼
+
+Deploy Lambda
+
+        │
+
+        ▼
+
+Configure Notifications
+
+        │
+
+        ▼
+
+Run test_demo.py
+
+        │
+
+        ▼
+
+Upload File
+
+        │
+
+        ▼
+
+Lambda Executes
+
+        │
+
+        ▼
+
+Metadata Stored
+
+        │
+
+        ▼
+
+Success
+```
+
+---
+
+# 📚 Key Concepts Demonstrated
+
+This project demonstrates several important cloud engineering concepts.
+
+### Multi-Cloud Development
+
+Running AWS, Azure and Google Cloud simultaneously on a local machine.
+
+---
+
+### Event-Driven Architecture
+
+Automatically responding to object uploads using event notifications.
+
+---
+
+### Serverless Computing
+
+Using Lambda functions without managing servers.
+
+---
+
+### Infrastructure Automation
+
+Provisioning cloud resources using PowerShell.
+
+---
+
+### Cloud Storage
+
+Working with
+
+- Amazon S3
+- Azure Blob Storage
+- Google Cloud Storage
+
+inside a local development environment.
+
+---
+
+### NoSQL Databases
+
+Using DynamoDB for storing processed metadata.
+
+---
+
+# 🎯 Learning Outcomes
+
+Building this project helped me gain practical experience with:
+
+- Local cloud emulation using Floci
+- Docker Compose orchestration
+- Container networking
+- AWS S3 object storage
+- AWS Lambda deployment
+- Event-driven architectures
+- DynamoDB integration
+- Python cloud SDKs
+- Infrastructure automation with PowerShell
+- Multi-cloud development workflows
+- Testing cloud-native applications without cloud accounts
+
+---
+
+# 💡 Why This Project Matters
+
+Traditional cloud development often requires developers to provision infrastructure before they can begin testing.
+
+This introduces:
+
+- Cloud costs
+- Deployment delays
+- Internet dependency
+- Account management
+- Configuration complexity
+
+This project demonstrates an alternative workflow where cloud-native applications can be developed, tested and validated entirely on a local machine.
+
+Benefits include:
+
+- Zero cloud cost
+- Faster development cycles
+- Offline testing
+- Safe experimentation
+- Reproducible environments
+
+For developers learning cloud technologies, this provides an efficient way to understand cloud services before deploying to production.
+
+---
+
+# 🚀 Future Improvements
+
+Potential enhancements for this project include:
+
+- Integrating Apache Kafka for event streaming
+- Building automated CI/CD pipelines
+- Adding Infrastructure as Code using Terraform
+- Supporting additional cloud services
+- Implementing automated monitoring and logging
+- Adding unit and integration tests
+- Deploying the same architecture to real cloud providers
+- Extending the pipeline with data transformation workflows
+
+---
+
+# 🤝 Acknowledgements
+
+This project was built using:
+
+- **Floci** for local cloud emulation
+- **Docker** for containerization
+- **Python** for application development
+- **AWS SDK for Python (boto3)** for interacting with AWS services
+- **Azure Storage SDK** for Blob Storage integration
+- **Google Cloud Storage SDK** for GCP storage operations
+
+Special thanks to the Floci project for making multi-cloud development accessible without requiring cloud accounts or infrastructure costs.
+
+---
+
+# 📄 License
+
+This repository is intended for educational purposes and experimentation with local cloud-native development.
+
+Feel free to fork the project, extend it and adapt it to your own learning or development workflows.
+
+---
+
+# ⭐ If You Found This Repository Useful
+
+If this project helped you understand local multi-cloud development or event-driven serverless architectures:
+
+- ⭐ Star this repository
+- 🍴 Fork it to experiment further
+- 💡 Open an issue for suggestions or improvements
+
+Contributions and feedback are always welcome.
+
+---
+
+# 👨‍💻 Author
+
+**Soniya Kambli**
+
+Data Engineer | SnowPro Certified | Microsoft Fabric Certified | Databricks Certified Data Engineer Associate
+
+Passionate about building modern data engineering solutions across cloud platforms, with a focus on Data Engineering, Cloud Computing, ETL/ELT pipelines, and scalable analytics architectures.
+
+---
+
+## 🎉 Conclusion
+
+This project demonstrates that cloud-native applications do not always require access to real cloud infrastructure. By leveraging Floci, Docker, and Python, it is possible to emulate AWS, Azure, and Google Cloud services locally, build event-driven serverless workflows, and validate multi-cloud architectures with zero cloud cost.
+
+The repository serves as both a practical learning resource and a reproducible reference implementation for developers interested in local cloud development, serverless computing, and multi-cloud data engineering.
