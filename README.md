@@ -70,6 +70,8 @@ Using **Floci**, Docker and Python, I recreated a complete local cloud environme
 
 The entire environment runs locally, allowing cloud-native applications to be developed, tested and validated without interacting with real cloud infrastructure.
 
+![Dashboard](Images/Dashboard.png)
+
 ---
 
 # 🚀 Project Overview
@@ -87,6 +89,8 @@ A unified ingestion pipeline uploads multiple file formats into three different 
 | Google Cloud | Cloud Storage | `user_clicks.csv` |
 
 Instead of provisioning three different cloud accounts, every service runs locally using Floci containers.
+
+![Architecture](Images/Cloud-Status.png)
 
 ---
 
@@ -115,6 +119,8 @@ When a file is uploaded into the S3 bucket, a Lambda function is automatically t
 The Lambda function extracts metadata about the uploaded object and stores it inside DynamoDB.
 
 This entire workflow executes locally without connecting to AWS.
+
+![Architecture](Images/Structure.png)
 
 ---
 
@@ -176,6 +182,7 @@ This repository demonstrates practical implementations of the following concepts
 - Azure Blob Storage
 - Google Cloud Storage
 
+![Architecture](Images/multi-cloud.png)
 ---
 
 ## Serverless Computing
@@ -605,6 +612,8 @@ Once the containers are running, open your browser.
 http://localhost:4500
 ```
 
+![Architecture](Images/AWS.png)
+
 This dashboard provides a unified interface for viewing resources across AWS, Azure and Google Cloud running locally.
 
 ---
@@ -878,9 +887,17 @@ You should be able to browse resources from
 
 - AWS
 
+![Architecture](Images/AWS.png)
+
 - Azure
 
+![Architecture](Images/Azure.png)
+
 - Google Cloud
+
+![Architecture](Images/GCP1.png)
+![Architecture](Images/GCP2.png)
+![Architecture](Images/GCP3.png)
 
 through a single dashboard.
 
@@ -945,43 +962,6 @@ docker compose down -v
 
 ---
 
-# 📸 Suggested Screenshots
-
-To make this repository more attractive, include screenshots such as:
-
-- Floci Dashboard Home
-
-- AWS S3 Bucket
-
-- Azure Blob Storage
-
-- Google Cloud Storage
-
-- Docker Containers Running
-
-- Successful Lambda Execution
-
-- DynamoDB Record
-
-- Terminal Output
-
-These screenshots will help readers understand the workflow and reproduce the project more easily.
-
----
-
-➡ **Next (Part 3)** will include:
-
-- Deep dive into every source file
-- Complete explanation of `processor.py`
-- Explanation of `demo.ps1`
-- Explanation of `test_demo.py`
-- What I learned
-- Challenges faced
-- Why this project matters for Data Engineering
-- Future improvements
-- License
-- Acknowledgements
-- Final conclusion suitable for recruiters and GitHub visitors
 
 # 🔍 Source Code Walkthrough
 
