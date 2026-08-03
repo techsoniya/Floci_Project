@@ -182,7 +182,7 @@ This repository demonstrates practical implementations of the following concepts
 - Azure Blob Storage
 - Google Cloud Storage
 
-![Architecture](Images/multi-cloud.png)
+![Architecture](Images/mutli-cloud.png)
 ---
 
 ## Serverless Computing
