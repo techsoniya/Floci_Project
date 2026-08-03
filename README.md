@@ -21,9 +21,7 @@ A complete Local Multi-Cloud development environment built using <b>Floci</b>, D
 The following diagram illustrates the complete local multi-cloud and event-driven serverless architecture implemented in this project.
 
 <p align="center">
-  <img src="Floci-Multi-CLoud.png"
-       alt="Floci Local Multi-Cloud Architecture"
-       width="1000">
+    <img src="../Images/Floci-Multi-Cloud.png" alt="Floci Multi Cloud Architecture" width="100%">
 </p>
 ---
 
