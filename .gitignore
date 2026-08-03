@@ -1,0 +1,8 @@
+/.pytest_cache
+/.venv
+/bootstrap_infra.ps1
+/check_status.py
+/check_status_fast.py
+/test_ingest.py
+/test_pipeline.py
+/__pycache__

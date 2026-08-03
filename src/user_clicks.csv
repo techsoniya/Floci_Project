@@ -1,0 +1,4 @@
+click_id,timestamp,user_id,page_url,device,action
+clk_001,2026-08-03T23:10:01Z,usr_101,/checkout,desktop,button_click
+clk_002,2026-08-03T23:10:05Z,usr_102,/pricing,mobile,scroll
+clk_003,2026-08-03T23:10:12Z,usr_103,/home,tablet,view

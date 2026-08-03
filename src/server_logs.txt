@@ -1,0 +1,3 @@
+[2026-08-03 23:14:02] INFO auth_service: User usr_4021 logged in from IP 192.168.1.45
+[2026-08-03 23:14:15] WARN payment_api: Latency spike detected on payment endpoint (342ms)
+[2026-08-03 23:15:00] ERROR order_processor: Failed to acquire lock for inventory update (ID: ITEM-A1)

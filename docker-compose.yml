@@ -1,0 +1,63 @@
+﻿services:
+  floci-ui:
+    image: floci/floci-ui:latest
+    ports:
+      - "4500:4500"
+    environment:
+      API_TARGET: http://floci-api:4501
+      VITE_USE_POLLING: "true"
+    depends_on:
+      - floci-api
+    networks:
+      - floci_default
+
+  floci-api:
+    image: floci/floci-api:latest
+    ports:
+      - "4501:4501"
+    environment:
+      FLOCI_ENDPOINT: http://floci:4566
+      FLOCI_AZURE_ENDPOINT: http://floci-az:4577
+      AWS_REGION: us-east-1
+      AWS_ACCESS_KEY_ID: test
+      AWS_SECRET_ACCESS_KEY: test
+      FLOCI_GCP_ENDPOINT: http://floci-gcp:4588
+      FLOCI_GCP_PROJECT: floci-local
+      PORT: "4501"
+    depends_on:
+      - floci
+    networks:
+      - floci_default
+
+  floci:
+    image: floci/floci:latest-compat
+    ports:
+      - "4566:4566"
+    volumes:
+      - ./data:/app/data
+    environment:
+      FLOCI_STORAGE_MODE: persistent
+    networks:
+      floci_default:
+        aliases:
+          - localhost.floci.io
+
+  floci-az:
+    image: floci/floci-az
+    profiles: ["multicloud"]
+    ports:
+      - "4577:4577"
+    networks:
+      - floci_default
+
+  floci-gcp:
+    image: floci/floci-gcp
+    profiles: ["multicloud"]
+    ports:
+      - "4588:4588"
+    networks:
+      - floci_default
+
+networks:
+  floci_default:
+    name: floci_default
