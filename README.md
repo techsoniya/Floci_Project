@@ -8,7 +8,7 @@
 ![AWS](https://img.shields.io/badge/AWS-S3%20%7C%20Lambda%20%7C%20DynamoDB-FF9900?style=for-the-badge&logo=amazonaws)
 ![Azure](https://img.shields.io/badge/Azure-Blob%20Storage-0078D4?style=for-the-badge&logo=microsoftazure)
 ![Google Cloud](https://img.shields.io/badge/GCP-Cloud%20Storage-4285F4?style=for-the-badge&logo=googlecloud)
-![Floci](https://img.shields.io/badge/Floci-Multi--Cloud-purple?style=for-the-badge))
+![Floci](https://img.shields.io/badge/Floci-Multi--Cloud-purple?style=for-the-badge)
 
 </p>
 
